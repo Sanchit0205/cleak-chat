@@ -1,33 +1,55 @@
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Bell, Menu, User } from "lucide-react-native";
+import { useState } from "react";
+import SideDrawer from "./SideDrawer";
+import UserMenuPopup from "./UserMenuPopup";
 
 export default function TopBar() {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [userPopupVisible, setUserPopupVisible] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <Menu color="#000000ff" size={24} />
-      </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => setDrawerVisible(true)}>
+          <Menu color="#000000ff" size={24} />
+        </TouchableOpacity>
 
-      {/* 🔹 Center CLEAK logo image */}
-      <View style={styles.center}>
-        <Image
-          source={require("../../assets/images/cleak_logo.png")} // <-- your logo path
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <View style={styles.center}>
+          <Image
+            source={require("../../assets/images/cleak_logo.png")}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+        </View>
+
+        <View style={styles.rightIcons}>
+          <TouchableOpacity style={{ marginRight: 15 }}>
+            <Bell color="#000000ff" size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setUserPopupVisible(!userPopupVisible)}>
+            <User color="#000000ff" size={24} />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={styles.rightIcons}>
-        <TouchableOpacity style={{ marginRight: 15 }}>
-          <Bell color="#000000ff" size={24} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <User color="#000000ff" size={24} />
-        </TouchableOpacity>
-      </View>
-    </View>
+      <SideDrawer
+        isVisible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+      />
+
+      <UserMenuPopup
+        isVisible={userPopupVisible}
+        onClose={() => setUserPopupVisible(false)}
+        userName="Sanchit"
+        userRole="User"
+        onLogout={() => alert("Logged out!")}
+        onNavigate={(screen) => alert(`Navigate to ${screen}`)}
+      />
+    </>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +59,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingTop: 10,
+    paddingTop: 20,
+    paddingBottom:20,
     elevation: 3, // optional subtle shadow
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -49,8 +72,8 @@ const styles = StyleSheet.create({
     marginLeft: 40,             // adjust distance (try 30–50)
   },
   logoImage: {
-    height: 40, // adjust as per logo
-    width: 100,
+    height: 80, // adjust as per logo
+    width: 140,
   },
   rightIcons: {
     flexDirection: "row",

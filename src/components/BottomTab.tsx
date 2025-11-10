@@ -10,7 +10,7 @@ import {
 } from "lucide-react-native";
 
 const TABS = [
-  { label: "Dashboard", route: "/(tabs)/", icon: Home },
+  { label: "Dashboard", route: "/(tabs)", icon: Home },
   { label: "Create", route: "/(tabs)/create", icon: PlusCircle },
   { label: "Chats", route: "/(tabs)/chats", icon: MessageSquare },
   { label: "Analytics", route: "/(tabs)/analytics", icon: BarChart2 },
@@ -23,7 +23,7 @@ function TabItem({ label, route, icon: Icon, active, onPress }) {
 
   useEffect(() => {
     Animated.spring(scaleAnim, {
-      toValue: active ? 1.2 : 1,
+      toValue: active ? 1.4 : 1,
       friction: 4,
       useNativeDriver: true,
     }).start();
@@ -43,7 +43,7 @@ function TabItem({ label, route, icon: Icon, active, onPress }) {
   return (
     <TouchableOpacity style={styles.tab} onPress={onPress} activeOpacity={0.7}>
       <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <Icon color={active ? "#007D69" : "#888"} size={26} />
+        <Icon color={active ? "#007D69" : "#888"} size={24} />
       </Animated.View>
       <Text style={[styles.label, active && styles.activeLabel]}>{label}</Text>
     </TouchableOpacity>
@@ -71,7 +71,7 @@ export default function BottomTab() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 70,
+    height: 80,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     color: "#888",
-    marginTop: 4,
+    marginTop: 8,
   },
   activeLabel: {
     color: "#007D69",
-    fontWeight: "600",
+    fontWeight: "800",
   },
 });

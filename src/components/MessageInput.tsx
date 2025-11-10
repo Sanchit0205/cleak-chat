@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
   container: { flexDirection: "row", alignItems: "center", padding: 8, backgroundColor: "#fff" },
   input: {
     flex: 1,
-    marginHorizontal: 8,
-    padding: 8,
+    marginHorizontal: 10,
+    padding: 16,
     backgroundColor: "#f0f0f0",
-    borderRadius: 20,
+    borderRadius: 30,
   },
 });
