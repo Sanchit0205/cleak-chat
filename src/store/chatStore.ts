@@ -1,34 +1,110 @@
 import { create } from "zustand";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface Message {
+export interface Message {
   id: string;
-  text: string;
+  chatId: string;
+  type: "text" | "image";
+  content: string;
   sender: "me" | "other";
+  timestamp: number;
 }
 
-interface ChatStore {
-  chats: Record<string, Message[]>;
-  getMessages: (id: string) => Message[];
-  sendMessage: (id: string, msg: Message) => void;
+export interface Chat {
+  id: string;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unread: boolean;
 }
 
-export const useChatStore = create<ChatStore>((set, get) => ({
-  chats: {
-    "1": [
-      { id: "1", text: "Hello!", sender: "other" },
-      { id: "2", text: "Hi!", sender: "me" },
-    ],
-    "2": [
-      { id: "1", text: "Hey there", sender: "other" },
-    ],
+interface ChatState {
+  chats: Chat[];
+  messages: Record<string, Message[]>; // messages[chatId] = []
+  loadChats: () => Promise<void>;
+  sendMessage: (chatId: string, content: string, type?: "text" | "image") => void;
+  getMessages: (chatId: string) => Message[];
+  persistData: () => Promise<void>;
+}
+
+export const useChatStore = create<ChatState>((set, get) => ({
+  chats: [],
+  messages: {},
+
+  loadChats: async () => {
+    try {
+      const savedChats = await AsyncStorage.getItem("chats");
+      const savedMessages = await AsyncStorage.getItem("messages");
+
+      if (savedChats && savedMessages) {
+        set({
+          chats: JSON.parse(savedChats),
+          messages: JSON.parse(savedMessages),
+        });
+      } else {
+        // Initialize dummy data for first run
+        const dummyChats: Chat[] = [
+          { id: "1", name: "John Doe", lastMessage: "Hey, how are you?", time: "10:24 PM", unread: true },
+          { id: "2", name: "CLEAK", lastMessage: "Your technician is coming tomorrow.", time: "09:30 AM", unread: false },
+          { id: "3", name: "Alice", lastMessage: "Did you receive the files?", time: "Yesterday", unread: true },
+        ];
+
+        const dummyMessages: Record<string, Message[]> = {
+          "1": [
+            { id: "m1", chatId: "1", type: "text", content: "Hey, how are you?", sender: "other", timestamp: Date.now() - 3600000 },
+            { id: "m2", chatId: "1", type: "text", content: "I'm good! What about you?", sender: "me", timestamp: Date.now() - 1800000 },
+          ],
+          "2": [
+            { id: "m3", chatId: "2", type: "text", content: "Your technician is coming tomorrow.", sender: "other", timestamp: Date.now() - 7200000 },
+          ],
+          "3": [
+            { id: "m4", chatId: "3", type: "text", content: "Did you receive the files?", sender: "other", timestamp: Date.now() - 600000 },
+          ],
+        };
+
+        set({ chats: dummyChats, messages: dummyMessages });
+        await AsyncStorage.setItem("chats", JSON.stringify(dummyChats));
+        await AsyncStorage.setItem("messages", JSON.stringify(dummyMessages));
+      }
+    } catch (err) {
+      console.log("Error loading chats:", err);
+    }
   },
-  getMessages: (id: string) => get().chats[id] ?? [], // ✅ fallback to empty array
-  sendMessage: (id: string, msg: Message) => {
-    set((state) => ({
-      chats: {
-        ...state.chats,
-        [id]: [...(state.chats[id] || []), msg],
-      },
-    }));
+
+  sendMessage: (chatId, content, type = "text") => {
+    const { messages, chats } = get();
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      chatId,
+      type,
+      content,
+      sender: "me",
+      timestamp: Date.now(),
+    };
+
+    const updatedMessages = {
+      ...messages,
+      [chatId]: [...(messages[chatId] || []), newMessage],
+    };
+
+    const updatedChats = chats.map(chat =>
+      chat.id === chatId
+        ? { ...chat, lastMessage: content, time: "Now", unread: false }
+        : chat
+    );
+
+    set({ messages: updatedMessages, chats: updatedChats });
+    get().persistData();
+  },
+
+  getMessages: (chatId) => {
+    const { messages } = get();
+    return messages[chatId] || [];
+  },
+
+  persistData: async () => {
+    const { chats, messages } = get();
+    await AsyncStorage.setItem("chats", JSON.stringify(chats));
+    await AsyncStorage.setItem("messages", JSON.stringify(messages));
   },
 }));

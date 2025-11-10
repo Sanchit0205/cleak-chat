@@ -1,19 +1,27 @@
 // src/components/ChatBubble.tsx
-import { View, Text, StyleSheet } from "react-native";
-import { Message } from "../types/chat";
+import { View, Text, Image, StyleSheet } from "react-native";
 
-export default function ChatBubble({ text, type, timestamp }: Message) {
-  const isOutgoing = type === "outgoing";
+interface ChatBubbleProps {
+  message: string;
+  isMine: boolean;
+  type?: "text" | "image";
+  timestamp?: string;
+}
 
+export default function ChatBubble({ message, isMine, type, timestamp }: ChatBubbleProps) {
   return (
     <View
       style={[
         styles.container,
-        isOutgoing ? styles.outgoing : styles.incoming,
+        isMine ? styles.outgoing : styles.incoming,
       ]}
     >
-      <Text style={styles.text}>{text}</Text>
-      <Text style={styles.time}>{timestamp}</Text>
+      {type === "image" ? (
+        <Image source={{ uri: message }} style={styles.image} />
+      ) : (
+        <Text style={styles.text}>{message}</Text>
+      )}
+      {timestamp && <Text style={styles.time}>{timestamp}</Text>}
     </View>
   );
 }
@@ -22,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     maxWidth: "80%",
     marginVertical: 4,
-    padding: 10,
+    padding: 8,
     borderRadius: 12,
   },
   incoming: {
@@ -35,4 +43,5 @@ const styles = StyleSheet.create({
   },
   text: { fontSize: 14, color: "#000" },
   time: { fontSize: 10, color: "#999", marginTop: 2, textAlign: "right" },
+  image: { width: 180, height: 180, borderRadius: 10 },
 });

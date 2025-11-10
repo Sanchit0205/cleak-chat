@@ -1,3 +1,4 @@
+// cleak-chat-clone\app\(tabs)\chats\_layout.tsx
 import { Slot } from "expo-router";
 import { View, StyleSheet } from "react-native";
 

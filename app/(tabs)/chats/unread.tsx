@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import ChatTopBar from "../../../src/components/ChatTopBar";
 import ChatFilterTabs from "../../../src/components/ChatFilterTabs";
 import SearchBar from "../../../src/components/SearchBar";
 import ChatCard from "../../../src/components/ChatCard";
-
-const DUMMY_CHATS = [
-  { id: "1", name: "John Doe", lastMessage: "Hey, how are you?", time: "10:24 PM", unread: true },
-  { id: "2", name: "CLEAK", lastMessage: "Your technician is coming tomorrow.", time: "09:30 AM", unread: false },
-  { id: "3", name: "Alice", lastMessage: "Did you receive the files?", time: "Yesterday", unread: true },
-];
+import { useChatStore } from "../../../src/store/chatStore";
 
 export default function UnreadChats() {
+  const { chats, loadChats } = useChatStore();
   const [searchText, setSearchText] = useState("");
 
-  const unreadChats = DUMMY_CHATS.filter(chat => chat.unread);
+  useEffect(() => {
+    loadChats();
+  }, []);
 
+  const unreadChats = chats.filter((chat) => chat.unread);
   const filteredChats = unreadChats.filter(
-    chat =>
+    (chat) =>
       chat.name.toLowerCase().includes(searchText.toLowerCase()) ||
       chat.lastMessage.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -25,7 +24,6 @@ export default function UnreadChats() {
   return (
     <View style={styles.container}>
       <ChatTopBar title="Chats" />
-
       <ChatFilterTabs active="unread" />
 
       <SearchBar
@@ -36,7 +34,7 @@ export default function UnreadChats() {
 
       <FlatList
         data={filteredChats}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ChatCard {...item} />}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
@@ -47,5 +45,6 @@ export default function UnreadChats() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
 });

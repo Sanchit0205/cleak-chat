@@ -1,18 +1,16 @@
-// src/types/chat.ts
-
-export type MessageType = "incoming" | "outgoing" | "attachment";
-
-export interface Message {
-  id: string;
-  text: string;
-  type: MessageType;
-  timestamp: string;
-}
-
 export interface Chat {
   id: string;
   name: string;
   lastMessage: string;
+  time: string;
   unread: boolean;
-  messages?: Message[];
+  messages: Message[];
+}
+
+export interface Message {
+  id: string;
+  sender: "me" | "other";
+  type: "text" | "image";
+  content: string;
+  time: string;
 }

@@ -1,25 +1,33 @@
 // src/components/ChatDetailTopBar.tsx
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { ArrowLeft, Trash2, FileText, ShoppingCart } from "lucide-react-native";
+import { useRouter } from "expo-router";
 
 interface Props {
-  name: string;
+  title: string;
   subtitle?: string;
+  avatar?: string;
 }
 
-export default function ChatDetailTopBar({ name, subtitle }: Props) {
+export default function ChatDetailTopBar({ title, subtitle, avatar }: Props) {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <ArrowLeft size={24} color="#000" />
         </TouchableOpacity>
+
         <Image
-          source={{ uri: "https://via.placeholder.com/40" }}
+          source={{
+            uri: avatar || "https://via.placeholder.com/40",
+          }}
           style={styles.avatar}
         />
+
         <View>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name}>{title}</Text>
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
       </View>
@@ -51,7 +59,8 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
   },
   left: { flexDirection: "row", alignItems: "center" },
-  avatar: { width: 40, height: 40, borderRadius: 20, marginHorizontal: 8 },
+  backButton: { marginRight: 8 },
+  avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 8 },
   name: { fontSize: 16, fontWeight: "600" },
   subtitle: { fontSize: 12, color: "#666" },
   right: { flexDirection: "row", alignItems: "center" },
