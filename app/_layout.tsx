@@ -2,6 +2,7 @@ import { Slot } from "expo-router";
 import { View, StyleSheet, StatusBar } from "react-native";
 import TopBar from "../src/components/TopBar";
 import BottomTab from "../src/components/BottomTab";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 
@@ -15,21 +16,23 @@ export default function RootLayout() {
 //   clearData();
 // }, []);
   return (
-    <View style={styles.container}>
-      {/* 🔹 Black status bar */}
-      <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        {/* 🔹 Black status bar */}
+        <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
 
-      {/* 🔹 Fixed TopBar */}
-      <TopBar />
+        {/* 🔹 Fixed TopBar */}
+        <TopBar />
 
-      {/* 🔹 Dynamic content area */}
-      <View style={styles.content}>
-        <Slot />
-      </View>
+        {/* 🔹 Dynamic content area */}
+        <View style={styles.content}>
+          <Slot />
+        </View>
 
-      {/* 🔹 Fixed BottomTab */}
-      <BottomTab />
-    </View>
+        {/* 🔹 Fixed BottomTab */}
+        <BottomTab />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -40,6 +43,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff9f9ff",
   },
 });

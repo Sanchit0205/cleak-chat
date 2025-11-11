@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingTop: 20,
-    paddingBottom:20,
-    elevation: 3, // optional subtle shadow
+    paddingTop: 24,
+    paddingBottom:30,
+    // elevation: 3, // optional subtle shadow
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     alignItems: "flex-start",  // move left
-    marginLeft: 40,             // adjust distance (try 30–50)
+    marginLeft: 20,             // adjust distance (try 30–50)
   },
   logoImage: {
     height: 80, // adjust as per logo

@@ -71,14 +71,15 @@ export default function BottomTab() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
+    height: 63,
+    paddingTop: 10,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#fff",
     borderTopWidth: 1,
     borderColor: "#ddd",
-    elevation: 5,
+    elevation: 0,
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: -2 },

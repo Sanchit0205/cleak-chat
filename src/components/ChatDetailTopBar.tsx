@@ -6,6 +6,7 @@ import React, { useRef, useState } from "react";
 import { useChatStore } from "../store/chatStore";
 import SendTemplateMessage from "./SendTemplateMessage";
 import CreateSale from "./CreateSale"; // Adjust the path if your file is in a different folder
+import ContactDetailsModal from "./ContactDetailsModal";
 
 
 interface Props {
@@ -29,7 +30,7 @@ const productsList = [
   { name: "Product A", price: 100, stock: 10 },
   { name: "Product B", price: 200, stock: 5 },
 ];
-
+const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
     setShowModal(true);
@@ -61,6 +62,10 @@ const productsList = [
           <View>
             <Text style={styles.name}>{title}</Text>
             {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+  <Text style={styles.contactInfoText}>click here for contact info</Text>
+</TouchableOpacity>
+
           </View>
         </View>
 
@@ -78,6 +83,11 @@ const productsList = [
           </TouchableOpacity>
         </View>
       </View>
+
+      <ContactDetailsModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
 
       {/* Template Modal */}
       <SendTemplateMessage
@@ -118,7 +128,7 @@ const productsList = [
 }
 
 const styles = StyleSheet.create({
-  container: { height: 70, backgroundColor: "#F0F2F5", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 12, borderBottomWidth: 1, borderColor: "#ddd" },
+  container: { height: 70, backgroundColor: "#f6f6f6ff", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 12, borderBottomWidth: 1, borderColor: "#ddd" },
   left: { flexDirection: "row", alignItems: "center" },
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: "#22C55E", justifyContent: "center", alignItems: "center", marginRight: 8 },
   avatarText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
@@ -128,6 +138,11 @@ const styles = StyleSheet.create({
   right: { flexDirection: "row", alignItems: "center" },
   iconBtn: { marginLeft: 12 },
 
+  contactInfoText: {
+  fontSize: 12,
+  color: "#007D69", // green or any accent color
+  marginTop: 2,
+},
   // Delete modal styles
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.3)", justifyContent: "center", alignItems: "center" },
   modalBox: { width: "80%", backgroundColor: "#fff", borderRadius: 16, padding: 20, shadowColor: "#000", shadowOpacity: 0.2, shadowOffset: { width: 0, height: 4 }, shadowRadius: 6, elevation: 5 },
@@ -138,4 +153,5 @@ const styles = StyleSheet.create({
   cancelText: { textAlign: "center", fontWeight: "600" },
   deleteBtn: { flex: 1, marginLeft: 8, backgroundColor: "#E53935", padding: 10, borderRadius: 10 },
   deleteText: { color: "#fff", textAlign: "center", fontWeight: "600" },
+
 });
