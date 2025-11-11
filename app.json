@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "cleak-chat-clone",
+    "name": "Cleak",
     "slug": "cleak-chat-clone",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,15 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splashscreen_logo.png",
-          "resizeMode": "contain",
+          "resizeMode": "cover",
           "backgroundColor": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cd543014-b9d4-46ad-abd6-c4aa6a6e23fd"
+      }
+    }
   }
 }

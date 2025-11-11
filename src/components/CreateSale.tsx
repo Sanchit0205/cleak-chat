@@ -57,7 +57,7 @@ export default function CreateSale({
       Animated.spring(scaleAnim, {
         toValue: 1,
         useNativeDriver: true,
-        friction: 6,
+        friction: 20,
         tension: 100,
       }).start();
     } else {
@@ -126,12 +126,14 @@ export default function CreateSale({
                   <Text style={styles.productLabel}>Product {i + 1}</Text>
                   <TextInput
                     placeholder="Product Name"
+                    placeholderTextColor="#999"
                     value={item.productName}
                     onChangeText={(t) => updateItem(i, "productName", t)}
                     style={styles.input}
                   />
                   <TextInput
                     placeholder="Quantity"
+                    placeholderTextColor="#999"
                     keyboardType="number-pad"
                     value={String(item.quantity)}
                     onChangeText={(t) => updateItem(i, "quantity", Number(t))}
@@ -139,6 +141,7 @@ export default function CreateSale({
                   />
                   <TextInput
                     placeholder="Price (₹)"
+                    placeholderTextColor="#999"
                     keyboardType="number-pad"
                     value={String(item.price)}
                     onChangeText={(t) => updateItem(i, "price", Number(t))}
@@ -159,6 +162,7 @@ export default function CreateSale({
                 <TextInput
                   key={key}
                   placeholder={key}
+                  placeholderTextColor="#999"
                   value={val}
                   onChangeText={(text) => setCustomerInfo({ ...customerInfo, [key]: text })}
                   style={styles.input}
@@ -180,6 +184,7 @@ export default function CreateSale({
               {/* GST & Payment */}
               <TextInput
                 placeholder="GST Rate (%)"
+                placeholderTextColor="#999"
                 keyboardType="number-pad"
                 value={String(gstRate)}
                 onChangeText={(t) => setGstRate(Number(t))}
@@ -187,6 +192,7 @@ export default function CreateSale({
               />
               <TextInput
                 placeholder="Payment Type (UPI/Cash/Bank/Other)"
+                placeholderTextColor="#999"
                 value={paymentType}
                 onChangeText={(t) => setPaymentType(t as any)}
                 style={styles.input}
@@ -194,6 +200,7 @@ export default function CreateSale({
               {(paymentType === "UPI" || paymentType === "Bank") && (
                 <TextInput
                   placeholder="UTR / Transaction ID"
+                  placeholderTextColor="#999"
                   value={utr}
                   onChangeText={setUtr}
                   style={styles.input}

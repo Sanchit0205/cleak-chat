@@ -35,7 +35,7 @@ export default function UserMenuPopup({
       Animated.spring(scaleAnim, {
         toValue: 1,
         useNativeDriver: true,
-        friction: 6,
+        friction: 30,
         tension: 100,
       }).start();
     } else {
@@ -105,7 +105,7 @@ export default function UserMenuPopup({
           style={styles.logoutBtn}
           onPress={() => {
             onLogout();
-            onClose();
+            onClose();  
           }}
         >
           <Text style={styles.logoutText}>Logout</Text>
@@ -121,29 +121,38 @@ const popupWidth = width * 0.65; // responsive width
 const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
-    top: 60,
-    right: 16,
-    zIndex: 1000,
-  },
-  overlay: {
-    position: "absolute",
-    top: -60,
-    left: -16,
+    top: 30,
+    left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "transparent",
+    zIndex: 1000,
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
   },
+
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "transparent", // transparent but clickable
+  },
+
   popupContainer: {
-    width: popupWidth,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 10,
-    elevation: 6,
+  marginTop: 60, // distance from top (where your profile icon might be)
+  marginRight: 16,
+  width: popupWidth,
+  backgroundColor: "#fff",
+  borderRadius: 12,
+  padding: 15,
+  shadowColor: "#000",
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 4 },
+  shadowRadius: 10,
+  elevation: 6,
   },
+
   header: {
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",

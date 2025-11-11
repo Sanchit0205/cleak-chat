@@ -20,7 +20,7 @@ export default function SendTemplateMessage({ isVisible, onClose, customerName, 
       Animated.spring(scaleAnim, {
         toValue: 1,
         useNativeDriver: true,
-        friction: 6,
+        friction: 20,
         tension: 100,
       }).start();
     } else {
@@ -61,7 +61,7 @@ export default function SendTemplateMessage({ isVisible, onClose, customerName, 
                 onValueChange={(itemValue) => setSelectedTemplate(itemValue)}
                 style={{ height: 50 }}
               >
-                <Picker.Item label="Select Template..." value="" />
+                <Picker.Item label="Select Template..." value="" color="#606060ff" />
                 {templates.map((t, i) => (
                   <Picker.Item key={i} label={t} value={t} />
                 ))}

@@ -1,40 +1,26 @@
 // src/components/ContactDetailsModal.tsx
 import React from "react";
-import {
-  View,
-  Text,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { X } from "lucide-react-native";
-
-interface Contact {
-  name: string;
-  phone: string;
-  email?: string;
-  optIn?: string;
-}
+import { useChatStore } from "../store/chatStore";
 
 interface Props {
   visible: boolean;
   onClose: () => void;
-  contact?: Contact;
+  chatId: string; // identify which contact to show
 }
 
-export default function ContactDetailsModal({
-  visible,
-  onClose,
-  contact = {
-    name: "CLEAK",
-    phone: "917387567342",
+export default function ContactDetailsModal({ visible, onClose, chatId }: Props) {
+  const contact = useChatStore((state) => state.getContactByChatId(chatId));
+  const defaultContact = {
+    name: "Unknown",
+    phone: "N/A",
     email: "Not provided",
     optIn: "UNKNOWN",
-  },
-}: Props) {
-  const { name, phone, email, optIn } = contact;
-  const initial = name.charAt(0).toUpperCase();
+  };
+
+  const data = contact || defaultContact;
+  const initial = data.name.charAt(0).toUpperCase();
 
   return (
     <Modal animationType="fade" transparent visible={visible}>
@@ -49,16 +35,15 @@ export default function ContactDetailsModal({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Contact Summary */}
             <View style={styles.summary}>
               <View style={styles.avatar}>
                 <Text style={styles.avatarText}>{initial}</Text>
               </View>
               <View style={styles.summaryText}>
-                <Text style={styles.contactName}>{name}</Text>
-                <Text style={styles.phoneNumber}>{phone}</Text>
+                <Text style={styles.contactName}>{data.name}</Text>
+                <Text style={styles.phoneNumber}>{data.phone}</Text>
                 <View style={styles.optInBadge}>
-                  <Text style={styles.optInText}>{optIn}</Text>
+                  <Text style={styles.optInText}>{data.optIn}</Text>
                 </View>
               </View>
               <TouchableOpacity style={styles.editButton}>
@@ -66,20 +51,17 @@ export default function ContactDetailsModal({
               </TouchableOpacity>
             </View>
 
-            {/* Contact Information */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Contact Information</Text>
-              <Text>Email: {email}</Text>
-              <Text>Phone: {phone}</Text>
+              <Text>Email: {data.email}</Text>
+              <Text>Phone: {data.phone}</Text>
             </View>
 
-            {/* Custom Attributes */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Custom Attributes</Text>
               <Text style={styles.placeholderText}>No data</Text>
             </View>
 
-            {/* Campaign History */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Campaign History</Text>
               <Text style={styles.placeholderText}>No campaign history</Text>

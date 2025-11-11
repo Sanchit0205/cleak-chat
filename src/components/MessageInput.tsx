@@ -57,6 +57,7 @@ export default function MessageInput({ value, onChangeText, onSend }: Props) {
       <TextInput
         style={[styles.input, isFocused && styles.inputFocused]}
         placeholder="Type a message"
+        placeholderTextColor="#999"
         value={value}
         onChangeText={onChangeText}
         multiline

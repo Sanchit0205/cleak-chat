@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom:30,
+    paddingTop: 26,
+    paddingBottom:26,
     // elevation: 3, // optional subtle shadow
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -72,11 +72,13 @@ const styles = StyleSheet.create({
     marginLeft: 20,             // adjust distance (try 30–50)
   },
   logoImage: {
-    height: 80, // adjust as per logo
-    width: 140,
+    height: 70, // adjust as per logo
+    width: 120,
   },
   rightIcons: {
     flexDirection: "row",
     alignItems: "center",
+    height: 40,
+    width: 80,
   },
 });

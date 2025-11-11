@@ -5,9 +5,8 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState } from "react";
 import { useChatStore } from "../store/chatStore";
 import SendTemplateMessage from "./SendTemplateMessage";
-import CreateSale from "./CreateSale"; // Adjust the path if your file is in a different folder
+import CreateSale from "./CreateSale";
 import ContactDetailsModal from "./ContactDetailsModal";
-
 
 interface Props {
   title: string;
@@ -17,38 +16,60 @@ interface Props {
 
 export default function ChatDetailTopBar({ title, subtitle }: Props) {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams(); // <-- this is your chatId
   const { deleteChat } = useChatStore();
-  const [showModal, setShowModal] = useState(false);
+
+  // Delete modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
+  // Contact modal
+  const [showContactModal, setShowContactModal] = useState(false);
+
+  // Template modal
   const [showTemplateModal, setShowTemplateModal] = useState(false);
-  const templates = ["Hello {{name}}, your order is ready!", "Hi {{name}}, your invoice is attached."];
 
+  // Sale modal
   const [showCreateSale, setShowCreateSale] = useState(false);
-const productsList = [
-  { name: "Product A", price: 100, stock: 10 },
-  { name: "Product B", price: 200, stock: 5 },
-];
-const [modalVisible, setModalVisible] = useState(false);
 
-  const openModal = () => {
-    setShowModal(true);
-    Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true, friction: 6, tension: 100 }).start();
+  const templates = [
+    "Hello {{name}}, your order is ready!",
+    "Hi {{name}}, your invoice is attached.",
+  ];
+
+  const productsList = [
+    { name: "Product A", price: 100, stock: 10 },
+    { name: "Product B", price: 200, stock: 5 },
+  ];
+
+  // Delete modal animations
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 6,
+      tension: 100,
+    }).start();
   };
 
-  const closeModal = () => {
-    Animated.timing(scaleAnim, { toValue: 0, duration: 200, useNativeDriver: true }).start(() => setShowModal(false));
+  const closeDeleteModal = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setShowDeleteModal(false));
   };
 
   const handleDelete = async () => {
     await deleteChat(id as string);
-    closeModal();
+    closeDeleteModal();
     router.back();
   };
 
   return (
     <>
+      {/* Top Bar */}
       <View style={styles.container}>
         <View style={styles.left}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -62,10 +83,9 @@ const [modalVisible, setModalVisible] = useState(false);
           <View>
             <Text style={styles.name}>{title}</Text>
             {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-  <Text style={styles.contactInfoText}>click here for contact info</Text>
-</TouchableOpacity>
-
+            <TouchableOpacity onPress={() => setShowContactModal(true)}>
+              <Text style={styles.contactInfoText}>Click here for contact info</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -78,18 +98,20 @@ const [modalVisible, setModalVisible] = useState(false);
             <FileText size={22} color="#000" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.iconBtn} onPress={openModal}>
+          <TouchableOpacity style={styles.iconBtn} onPress={openDeleteModal}>
             <Trash2 size={22} color="#E53935" />
           </TouchableOpacity>
         </View>
       </View>
 
+      {/* Contact Details Modal */}
       <ContactDetailsModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        visible={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        chatId={id as string}
       />
 
-      {/* Template Modal */}
+      {/* Template Message Modal */}
       <SendTemplateMessage
         isVisible={showTemplateModal}
         onClose={() => setShowTemplateModal(false)}
@@ -98,6 +120,7 @@ const [modalVisible, setModalVisible] = useState(false);
         onSend={(template) => alert(`Template sent: ${template}`)}
       />
 
+      {/* Create Sale Modal */}
       <CreateSale
         isVisible={showCreateSale}
         onClose={() => setShowCreateSale(false)}
@@ -106,14 +129,16 @@ const [modalVisible, setModalVisible] = useState(false);
         onCreateBill={(data) => console.log("Bill Created:", data)}
       />
 
-      {/* Delete Modal */}
-      <Modal visible={showModal} transparent animationType="fade">
+      {/* Delete Confirmation Modal */}
+      <Modal visible={showDeleteModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <Animated.View style={[styles.modalBox, { transform: [{ scale: scaleAnim }] }]}>
             <Text style={styles.modalTitle}>Delete chat with {title}?</Text>
-            <Text style={styles.modalSubtitle}>This will permanently remove all messages for this conversation.</Text>
+            <Text style={styles.modalSubtitle}>
+              This will permanently remove all messages for this conversation.
+            </Text>
             <View style={styles.modalActions}>
-              <TouchableOpacity style={styles.cancelBtn} onPress={closeModal}>
+              <TouchableOpacity style={styles.cancelBtn} onPress={closeDeleteModal}>
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>

@@ -34,14 +34,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   incoming: {
-    backgroundColor: "#fff",
+    backgroundColor: "#fff4f4ff",
     alignSelf: "flex-start",
   },
   outgoing: {
     backgroundColor: "#E9FCE8",
     alignSelf: "flex-end",
   },
-  text: { fontSize: 14, color: "#000" },
-  time: { fontSize: 10, color: "#999", marginTop: 2, textAlign: "right" },
+  text: { fontSize: 16, color: "#000" },
+  time: { fontSize: 11, color: "#999", marginTop: 2, textAlign: "right" },
   image: { width: 180, height: 180, borderRadius: 10 },
 });
